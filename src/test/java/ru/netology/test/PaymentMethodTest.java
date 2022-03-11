@@ -29,4 +29,17 @@ class PaymentMethodTest {
         paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
         paymentFields.getContinueButton().click();
     }
+
+    @Test
+    void shouldBuyTourUsingCreditCard() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+    }
 }
