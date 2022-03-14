@@ -148,4 +148,60 @@ class PaymentMethodTest {
         paymentFields.getContinueButton().click();
         paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
     }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithYearInPast() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue("21");
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getCardHasExpired().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithYearInPast() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue("21");
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getCardHasExpired().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithYearInFuture() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue("28");
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithYearInFuture() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue("28");
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
 }
