@@ -2,7 +2,11 @@ package ru.netology.data;
 
 import com.github.javafaker.Faker;
 import lombok.Value;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -28,7 +32,7 @@ public class DataHelper {
         do {
             randomMonth = faker.number().numberBetween(1, 13);
             randomYear = faker.number().numberBetween(currentYear, (currentYear + 5));
-        } while (randomMonth < currentMonth && randomYear <= currentYear);
+        } while (randomMonth <= currentMonth && randomYear <= currentYear);
         LocalDate randomDate = LocalDate.of(randomYear, randomMonth, 1);
         return randomDate;
     }
@@ -49,14 +53,40 @@ public class DataHelper {
         return faker.number().digits(3);
     }
 
-    //    public static AuthInfo getApprovedCard() {
-//        return new AuthInfo("4444 4444 4444 4441", getRandomMonth(), getRandomYear(), getRandomHolderName(), getRandomCvc());
-//    }
     public static String getApprovedCard() {
         return "4444 4444 4444 4441";
     }
 
-//    public static AuthInfo getDeclinedCard() {
-//        return new AuthInfo("4444 4444 4444 4442", getRandomMonth(DataHelper.getRandomDate()), getRandomYear(DataHelper.getRandomDate()), getRandomHolderName(), getRandomCvc());
-//    }
+    public static String getDeclinedCard() {
+        return "4444 4444 4444 4442";
+    }
+
+    @Value
+    public static class StatusFromDb {
+        private String status;
+    }
+
+    public static StatusFromDb getStatusFromDb() {
+        String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
+        var runner = new QueryRunner();
+        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app"
+                , "pass")) {
+            String status = runner.query(conn, statusSQL, new ScalarHandler<String>());
+            return new StatusFromDb(status);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public void cleanDataFromTable() {
+        String clearCodes = "DELETE FROM payment_entity;";
+        var runner = new QueryRunner();
+        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app"
+                , "pass")) {
+            var status = runner.update(conn, clearCodes);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 }
