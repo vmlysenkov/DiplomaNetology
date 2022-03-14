@@ -17,5 +17,5 @@ public class PaymentFields {
     private SelenideElement continueButton = $(withText("Продолжить"));
     private SelenideElement successNotification = $(withText("Операция одобрена"));
     private SelenideElement failureNotification = $(withText("Ошибка"));
-
+    private SelenideElement incorrectCardExpirationDate = $(withText("Неверно указан срок действия карты"));
 }

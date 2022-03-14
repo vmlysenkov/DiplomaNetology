@@ -92,4 +92,60 @@ class PaymentMethodTest {
         String expected = "DECLINED";
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithMonthLessThanMin() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue("00");
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithMonthLessThanMin() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue("00");
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithMonthMoreThanMax() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue("13");
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithMonthMoreThanMax() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue("13");
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue(DataHelper.getRandomHolderName());
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
+    }
 }
