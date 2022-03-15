@@ -204,4 +204,144 @@ class PaymentMethodTest {
         paymentFields.getContinueButton().click();
         paymentFields.getIncorrectCardExpirationDate().shouldBe(appear);
     }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithNumbersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("123");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithNumbersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("123");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithSpecialCharactersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("!!!");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithSpecialCharactersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("!!!");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithLongNameInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithLongNameInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithShortNameInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("F");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithShortNameInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("F");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingDebitCardWithCyrillicCharactersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingDebitCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("Вася");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithCyrillicCharactersInOwnerField() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.payUsingCreditCard();
+        PaymentFields paymentFields = new PaymentFields();
+        paymentFields.getCardNumber().setValue(DataHelper.getApprovedCard());
+        paymentFields.getMonth().setValue(DataHelper.getRandomMonth(DataHelper.getRandomValidDate()));
+        paymentFields.getYear().setValue(DataHelper.getRandomYear(DataHelper.getRandomValidDate()));
+        paymentFields.getHolderName().setValue("Вася");
+        paymentFields.getCvv().setValue(DataHelper.getRandomCvc());
+        paymentFields.getContinueButton().click();
+        paymentFields.getIncorrectOwnerName().shouldBe(appear);
+    }
 }
