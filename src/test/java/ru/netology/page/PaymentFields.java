@@ -21,4 +21,5 @@ public class PaymentFields {
     private SelenideElement cardHasExpired = $(withText("Истёк срок действия карты"));
     private SelenideElement incorrectOwnerName = $(withText("Неверно указан владелец карты"));
     private SelenideElement incorrectFormat = $(withText("Неверный формат"));
+    private SelenideElement needToFillInfo = $(withText("Поле обязательно для заполнения"));
 }
