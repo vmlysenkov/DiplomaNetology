@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Random;
 
 public class DataHelper {
     @Value
@@ -24,25 +25,8 @@ public class DataHelper {
     private static final Faker faker = new Faker(new Locale("en"));
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy");
 
-    public static LocalDate getRandomValidDate() {
-        LocalDate currentDate = LocalDate.now();
-        int currentMonth = Integer.parseInt(currentDate.format(formatter).substring(3, 5));
-        int currentYear = Integer.parseInt(currentDate.format(formatter).substring(6));
-        int randomMonth, randomYear;
-        do {
-            randomMonth = faker.number().numberBetween(1, 13);
-            randomYear = faker.number().numberBetween(currentYear, (currentYear + 5));
-        } while (randomMonth <= currentMonth && randomYear <= currentYear);
-        LocalDate randomDate = LocalDate.of(randomYear, randomMonth, 1);
-        return randomDate;
-    }
-
-    public static String getRandomMonth(LocalDate randomDate) {
-        return randomDate.format(formatter).substring(3, 5);
-    }
-
-    public static String getRandomYear(LocalDate randomDate) {
-        return randomDate.format(formatter).substring(6);
+    public static String getRandomValidDate(String formatPattern) {
+        return LocalDate.now().plusMonths(new Random().nextInt(60)).format(DateTimeFormatter.ofPattern(formatPattern));
     }
 
     public static String getRandomHolderName() {
