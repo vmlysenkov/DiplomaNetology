@@ -25,8 +25,7 @@ class MainPageTest {
 
     @AfterEach
     void shouldCleanData() {
-        DataHelper dataHelper = new DataHelper();
-        dataHelper.cleanDataFromTable();
+        DataHelper.cleanDataFromTable();
     }
     @AfterAll
     static void tearDownAll() {
@@ -34,10 +33,9 @@ class MainPageTest {
     }
 
     @Test
-    void checkForCorrectness() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
+    void shouldBuyTourUsingDebitCard() {
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
         debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
@@ -45,16 +43,15 @@ class MainPageTest {
         debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         debitCardPaymentPage.clickContinueButton();
         debitCardPaymentPage.checkSuccessNotification();
-        String actual = DataHelper.getStatusFromDb().getStatus();
-        String expected = "APPROVED";
+        var actual = DataHelper.getStatusFromDb().getStatus();
+        var expected = "APPROVED";
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void checkForCorrectnessCreditCard() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        CreditCardPaymentPage creditCardPaymentPage = new CreditCardPaymentPage();
+    void shouldBuyTourUsingCreditCard() {
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
@@ -62,57 +59,22 @@ class MainPageTest {
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkSuccessNotification();
-        String actual = DataHelper.getStatusFromDb().getStatus();
-        String expected = "APPROVED";
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldBuyTourUsingDebitCard() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getSuccessNotification().shouldBe(appear, Duration.ofSeconds(20));
-        String actual = DataHelper.getStatusFromDb().getStatus();
-        String expected = "APPROVED";
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldBuyTourUsingCreditCard() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getSuccessNotification().shouldBe(appear, Duration.ofSeconds(20));
-        String actual = DataHelper.getStatusFromDb().getStatus();
-        String expected = "APPROVED";
+        var actual = DataHelper.getStatusFromDb().getStatus();
+        var expected = "APPROVED";
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void shouldNotAcceptDeclinedDebitCard() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getDeclinedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getFailureNotification().shouldBe(appear, Duration.ofSeconds(20));
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getDeclinedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkFailureNotification();
         String actual = DataHelper.getStatusFromDb().getStatus();
         String expected = "DECLINED";
         Assertions.assertEquals(expected, actual);
@@ -120,16 +82,15 @@ class MainPageTest {
 
     @Test
     void shouldNotAcceptDeclinedCreditCard() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getDeclinedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getFailureNotification().shouldBe(appear, Duration.ofSeconds(20));
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getDeclinedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkFailureNotification();
         String actual = DataHelper.getStatusFromDb().getStatus();
         String expected = "DECLINED";
         Assertions.assertEquals(expected, actual);
@@ -137,421 +98,391 @@ class MainPageTest {
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithMonthLessThanMin() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("00");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField("00");
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithMonthLessThanMin() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("00");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField("00");
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithMonthMoreThanMax() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("13");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField("13");
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithMonthMoreThanMax() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("13");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField("13");
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithYearInPast() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("21");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getCardHasExpired().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField("21");
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkCardExpiration();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithYearInPast() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("21");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getCardHasExpired().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField("21");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkCardExpiration();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithYearInFuture() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("28");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField("28");
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithYearInFuture() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("28");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectCardExpirationDate().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField("28");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectCardExpirationDate();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithNumbersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("123");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("123");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithNumbersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("123");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("123");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithSpecialCharactersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("!!!");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("!!!");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithSpecialCharactersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("!!!");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("!!!");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithLongNameInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithLongNameInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithShortNameInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("F");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("F");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithShortNameInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("F");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("F");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithCyrillicCharactersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("Вася");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("Вася");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithCyrillicCharactersInOwnerField() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("Вася");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectHolderName().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("Вася");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectHolderName();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithInvalidCVC() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue("01");
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField("01");
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithInvalidCVC() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue("01");
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField("01");
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithEmptyCardNumber() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue("");
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField("");
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithEmptyCardNumber() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue("");
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField("");
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithEmptyMonth() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField("");
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithEmptyMonth() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue("");
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField("");
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithEmptyYear() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField("");
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithEmptyYear() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue("");
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField("");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithEmptyOwner() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getNeedToFillInfo().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField("");
+        debitCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkFieldFulfillmentObligation();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithEmptyOwner() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue("");
-        debitCardPaymentPage.getCvvField().setValue(DataHelper.getRandomCvc());
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getNeedToFillInfo().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField("");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkFieldFulfillmentObligation();
     }
 
     @Test
     void shouldNotBuyTourUsingDebitCardWithEmptyCvc() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingDebitCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue("");
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var debitCardPaymentPage = mainPage.payUsingDebitCard();
+        debitCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        debitCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        debitCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        debitCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        debitCardPaymentPage.setValueInCvvField("");
+        debitCardPaymentPage.clickContinueButton();
+        debitCardPaymentPage.checkIncorrectFormat();
     }
 
     @Test
     void shouldNotBuyTourUsingCreditCardWithEmptyCvc() {
-        MainPage mainPage = new MainPage();
-        mainPage.payUsingCreditCard();
-        DebitCardPaymentPage debitCardPaymentPage = new DebitCardPaymentPage();
-        debitCardPaymentPage.getCardNumberField().setValue(DataHelper.getApprovedCard());
-        debitCardPaymentPage.getMonthField().setValue(DataHelper.getRandomValidDate("MM"));
-        debitCardPaymentPage.getYearField().setValue(DataHelper.getRandomValidDate("yy"));
-        debitCardPaymentPage.getHolderNameField().setValue(DataHelper.getRandomHolderName());
-        debitCardPaymentPage.getCvvField().setValue("");
-        debitCardPaymentPage.getContinueButton().click();
-        debitCardPaymentPage.getIncorrectFormat().shouldBe(appear);
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField("");
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkIncorrectFormat();
     }
 }

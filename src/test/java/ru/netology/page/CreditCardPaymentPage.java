@@ -10,7 +10,6 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 
-@Value
 public class CreditCardPaymentPage {
     private SelenideElement cardNumberField = $("[placeholder=\"0000 0000 0000 0000\"]");
     private SelenideElement monthField = $("[placeholder=\"08\"]");
@@ -27,54 +26,54 @@ public class CreditCardPaymentPage {
     private SelenideElement needToFillInfo = $(withText("Поле обязательно для заполнения"));
 
     public void setValueInCardNumberField(String cardNumber) {
-        getCardNumberField().setValue(cardNumber);
+        cardNumberField.setValue(cardNumber);
     }
 
     public void setValueInMonthField(String month) {
-        getMonthField().setValue(month);
+        monthField.setValue(month);
     }
 
     public void setValueInYearField(String year) {
-        getYearField().setValue(year);
+        yearField.setValue(year);
     }
 
     public void setValueInHolderNameField(String holderName) {
-        getHolderNameField().setValue(holderName);
+        holderNameField.setValue(holderName);
     }
 
     public void setValueInCvvField(String cvv) {
-        getCvvField().setValue(cvv);
+        cvvField.setValue(cvv);
     }
 
     public void clickContinueButton() {
-        getContinueButton().click();
+        continueButton.click();
     }
 
     public void checkSuccessNotification() {
-        getSuccessNotification().shouldBe(appear, Duration.ofSeconds(20));
+        successNotification.shouldBe(appear, Duration.ofSeconds(20));
     }
 
     public void checkFailureNotification() {
-        getFailureNotification().shouldBe(appear, Duration.ofSeconds(20));
+        failureNotification.shouldBe(appear, Duration.ofSeconds(20));
     }
 
     public void checkIncorrectCardExpirationDate() {
-        getIncorrectCardExpirationDate().shouldBe(appear);
+        incorrectCardExpirationDate.shouldBe(appear);
     }
 
     public void checkCardExpiration() {
-        getCardHasExpired().shouldBe(appear);
+        cardHasExpired.shouldBe(appear);
     }
 
     public void checkIncorrectHolderName() {
-        getIncorrectHolderName().shouldBe(appear);
+        incorrectHolderName.shouldBe(appear);
     }
 
     public void checkIncorrectFormat() {
-        getIncorrectFormat().shouldBe(appear);
+        incorrectFormat.shouldBe(appear);
     }
 
     public void checkFieldFulfillmentObligation() {
-        getNeedToFillInfo().shouldBe(appear);
+        needToFillInfo.shouldBe(appear);
     }
 }

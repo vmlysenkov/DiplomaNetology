@@ -5,6 +5,7 @@ import lombok.Value;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -50,11 +51,19 @@ public class DataHelper {
         private String status;
     }
 
+    public static Connection getConnection(){
+        try {
+            return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static StatusFromDb getStatusFromDb() {
         String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
         var runner = new QueryRunner();
-        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app"
-                , "pass")) {
+        try (var conn = getConnection()) {
             String status = runner.query(conn, statusSQL, new ScalarHandler<String>());
             return new StatusFromDb(status);
         } catch (SQLException exception) {
@@ -63,12 +72,11 @@ public class DataHelper {
         return null;
     }
 
-    public void cleanDataFromTable() {
+    public static void cleanDataFromTable() {
         String clearCodes = "DELETE FROM payment_entity;";
         var runner = new QueryRunner();
-        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app"
-                , "pass")) {
-            var status = runner.update(conn, clearCodes);
+        try (var conn = getConnection()) {
+            runner.update(conn, clearCodes);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
