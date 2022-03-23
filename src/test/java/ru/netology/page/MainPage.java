@@ -18,9 +18,9 @@ public class MainPage {
         return new DebitCardPaymentPage();
     }
 
-    public DebitCardPaymentPage payUsingCreditCard() {
+    public CreditCardPaymentPage payUsingCreditCard() {
         creditCardPayment.click();
         visibleCreditCardPaymentText.shouldBe(visible);
-        return new DebitCardPaymentPage();
+        return new CreditCardPaymentPage();
     }
 }
