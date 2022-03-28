@@ -24,7 +24,7 @@ public class DataHelper {
     }
 
     private static final Faker faker = new Faker(new Locale("en"));
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy");
+    public static DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yy");
 
     public static String getRandomValidDate(String formatPattern) {
         return LocalDate.now().plusMonths(new Random().nextInt(60)).format(DateTimeFormatter.ofPattern(formatPattern));
@@ -46,12 +46,61 @@ public class DataHelper {
         return "4444 4444 4444 4442";
     }
 
+    public static String getZeroMonth() {
+        return "00";
+    }
+
+    public static String get13Month() {
+        return "13";
+    }
+
+    public static String getYearBeforeCurrent() {
+        int year = faker.number().numberBetween(2000, LocalDate.now().getYear());
+        LocalDate randomYear = LocalDate.now().withYear(year);
+        String yearInFormat = randomYear.format(yearFormatter);
+        System.out.println(yearInFormat);
+        return yearInFormat;
+    }
+
+    public static String getYearInFuture() {
+        int year = faker.number().numberBetween(LocalDate.now().getYear() + 6, 2100);
+        LocalDate randomYear = LocalDate.now().withYear(year);
+        String yearInFormat = randomYear.format(yearFormatter);
+        System.out.println(yearInFormat);
+        return yearInFormat;
+    }
+
+    public static String getNumber() {
+        return faker.number().digits(3);
+    }
+
+    public static String getSpecCharacter() {
+        return faker.regexify("[^A-Za-z0-9]{3}");
+    }
+
+    public static String getLongWord() {
+        return faker.regexify("[A-Za-z]{100}");
+    }
+
+    public static String getOneLetter() {
+        return faker.regexify("[A-Z]");
+    }
+
+    public static String getCyrillicName() {
+        Faker faker = new Faker(new Locale("ru"));
+        return faker.name().firstName();
+    }
+
+    public static String getInvalidCvc() {
+        return String.valueOf(faker.number().numberBetween(0, 99));
+    }
+
     @Value
     public static class StatusFromDb {
         private String status;
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
         } catch (SQLException e) {

@@ -67,7 +67,7 @@ class CreditCardPaymentPageTest {
         var mainPage = new MainPage();
         var creditCardPaymentPage = mainPage.payUsingCreditCard();
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
-        creditCardPaymentPage.setValueInMonthField("00");
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getZeroMonth());
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
         creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
@@ -80,7 +80,7 @@ class CreditCardPaymentPageTest {
         var mainPage = new MainPage();
         var creditCardPaymentPage = mainPage.payUsingCreditCard();
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
-        creditCardPaymentPage.setValueInMonthField("13");
+        creditCardPaymentPage.setValueInMonthField(DataHelper.get13Month());
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
         creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
@@ -94,7 +94,7 @@ class CreditCardPaymentPageTest {
         var creditCardPaymentPage = mainPage.payUsingCreditCard();
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
-        creditCardPaymentPage.setValueInYearField("21");
+        creditCardPaymentPage.setValueInYearField(DataHelper.getYearBeforeCurrent());
         creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
@@ -107,7 +107,7 @@ class CreditCardPaymentPageTest {
         var creditCardPaymentPage = mainPage.payUsingCreditCard();
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
-        creditCardPaymentPage.setValueInYearField("28");
+        creditCardPaymentPage.setValueInYearField(DataHelper.getYearInFuture());
         creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
@@ -121,7 +121,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
-        creditCardPaymentPage.setValueInHolderNameField("123");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getNumber());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectHolderName();
@@ -134,7 +134,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
-        creditCardPaymentPage.setValueInHolderNameField("!!!");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getSpecCharacter());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectHolderName();
@@ -147,7 +147,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
-        creditCardPaymentPage.setValueInHolderNameField("odpzlxasfpzbldwokdcqxwsptfdvmlinyvvymxwoubkocjfzgqgvgrbuslchgfjfiapjwnvytfpfxwcdckbrkatpsfpqzqauadcx");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getLongWord());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectHolderName();
@@ -160,7 +160,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
-        creditCardPaymentPage.setValueInHolderNameField("F");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getOneLetter());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectHolderName();
@@ -173,7 +173,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
-        creditCardPaymentPage.setValueInHolderNameField("Вася");
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getCyrillicName());
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectHolderName();
@@ -187,7 +187,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
         creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
         creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
-        creditCardPaymentPage.setValueInCvvField("01");
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getInvalidCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectFormat();
     }
