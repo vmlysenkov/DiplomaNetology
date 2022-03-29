@@ -10,8 +10,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 class CreditCardPaymentPageTest {
 
-    @BeforeAll
-    static void shouldOpenPage() {
+    @BeforeEach
+    void shouldOpenPage() {
         open("http://localhost:8080/");
     }
 
@@ -41,7 +41,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkSuccessNotification();
-        var actual = DataHelper.getStatusFromDb().getStatus();
+        var actual = DataHelper.getStatusOfCreditCardFromDb().getStatus();
         var expected = "APPROVED";
         Assertions.assertEquals(expected, actual);
     }
@@ -57,7 +57,7 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkFailureNotification();
-        String actual = DataHelper.getStatusFromDb().getStatus();
+        String actual = DataHelper.getStatusOfCreditCardFromDb().getStatus();
         String expected = "DECLINED";
         Assertions.assertEquals(expected, actual);
     }
@@ -255,5 +255,44 @@ class CreditCardPaymentPageTest {
         creditCardPaymentPage.setValueInCvvField("");
         creditCardPaymentPage.clickContinueButton();
         creditCardPaymentPage.checkIncorrectFormat();
+    }
+
+    @Test
+    void shouldNotBuyTourUsingCreditCardWithZeroYear() {
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getZeroYear());
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkCardExpiration();
+    }
+
+    @Test
+    void shouldNotAcceptCreditCardWithZeroValues() {
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getZeroCardValue());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getRandomCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkFailureNotification();
+    }
+
+    @Test
+    void shouldNotAcceptCreditCardWithZeroCvc() {
+        var mainPage = new MainPage();
+        var creditCardPaymentPage = mainPage.payUsingCreditCard();
+        creditCardPaymentPage.setValueInCardNumberField(DataHelper.getApprovedCard());
+        creditCardPaymentPage.setValueInMonthField(DataHelper.getRandomValidDate("MM"));
+        creditCardPaymentPage.setValueInYearField(DataHelper.getRandomValidDate("yy"));
+        creditCardPaymentPage.setValueInHolderNameField(DataHelper.getRandomHolderName());
+        creditCardPaymentPage.setValueInCvvField(DataHelper.getZeroCvc());
+        creditCardPaymentPage.clickContinueButton();
+        creditCardPaymentPage.checkFailureNotification();
     }
 }

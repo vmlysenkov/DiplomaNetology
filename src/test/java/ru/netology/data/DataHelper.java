@@ -50,6 +50,18 @@ public class DataHelper {
         return "00";
     }
 
+    public static String getZeroYear() {
+        return "00";
+    }
+
+    public static String getZeroCardValue() {
+        return "0000 0000 0000 0000";
+    }
+
+    public static String getZeroCvc() {
+        return "000";
+    }
+
     public static String get13Month() {
         return "13";
     }
@@ -95,6 +107,7 @@ public class DataHelper {
         return String.valueOf(faker.number().numberBetween(0, 99));
     }
 
+
     @Value
     public static class StatusFromDb {
         private String status;
@@ -109,7 +122,7 @@ public class DataHelper {
         return null;
     }
 
-    public static StatusFromDb getStatusFromDb() {
+    public static StatusFromDb getStatusOfDebitCardFromDb() {
         String statusSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
         var runner = new QueryRunner();
         try (var conn = getConnection()) {
@@ -121,10 +134,26 @@ public class DataHelper {
         return null;
     }
 
-    public static void cleanDataFromTable() {
-        String clearCodes = "DELETE FROM payment_entity;";
+    public static StatusFromDb getStatusOfCreditCardFromDb() {
+        String statusSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
         var runner = new QueryRunner();
         try (var conn = getConnection()) {
+            String status = runner.query(conn, statusSQL, new ScalarHandler<String>());
+            return new StatusFromDb(status);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void cleanDataFromTable() {
+        String clearCodesFromPaymentEntity = "DELETE FROM payment_entity;";
+        String clearCodesFromCreditEntity = "DELETE FROM credit_request_entity;";
+        String clearCodes = "DELETE FROM order_entity;";
+        var runner = new QueryRunner();
+        try (var conn = getConnection()) {
+            runner.update(conn, clearCodesFromPaymentEntity);
+            runner.update(conn, clearCodesFromCreditEntity);
             runner.update(conn, clearCodes);
         } catch (SQLException exception) {
             exception.printStackTrace();
