@@ -19,10 +19,10 @@ class DebitCardPaymentPageTest {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
-    @AfterEach
-    void shouldCleanData() {
-        DataHelper.cleanDataFromTable();
-    }
+//    @AfterEach
+//    void shouldCleanData() {
+//        DataHelper.cleanDataFromTable();
+//    }
 
     @AfterAll
     static void tearDownAll() {
