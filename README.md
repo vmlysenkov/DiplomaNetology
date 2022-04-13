@@ -30,3 +30,9 @@
 `./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"`, для postgresql
 `./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"`;
 4. Запустить отчет `./gradlew allureReport`.
+
+### Ссылки на документы
+
+* [План автоматизации тестирования](docs/Plan.md)
+* [Отчётные документы по итогам тестирования](docs/Report.md)
+* [Отчётные документы по итогам автоматизации](docs/Summary.md)
