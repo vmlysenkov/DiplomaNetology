@@ -9,7 +9,7 @@
 * Процент неуспешных автотестов: 40%;
 * Скрин отчёта Allure: 
 
-<image src="/../../../../../var/folders/rr/973plj8125b5tvdp6d_wz5tr0000gn/T/TemporaryItems/(A%20Document%20Being%20Saved%20By%20screencaptureui)/Screen%20Shot%202022-04-13%20at%2012.10.19 PM.png" alt="Текст с описанием картинки">
+<image src="file:///Users/vlysenkov/Desktop/Screen%20Shot%202022-04-13%20at%2012.08.35%20PM.png" alt="Отчёт Allure">
 
 ### Рекомендации:
 
