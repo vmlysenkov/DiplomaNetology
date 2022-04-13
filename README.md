@@ -22,14 +22,21 @@
 Пошаговый процесс установки и запуска
 
 1. Запустить контейнер командой `docker-compose up`;
-2. Для запуска сервиса с указанием пути к базе данных mysql использовать команду:
-`java "-Dspring.datasource.url=jdbc:mysql://localhost:3306/app" -jar artifacts/aqa-shop.jar`,
-к postgresql:
-`java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifacts/aqa-shop.jar`;
-3. Запустить тесты для mysql:
-`./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"`, для postgresql
-`./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"`;
-4. Запустить отчет `./gradlew allureReport`.
+2. Для запуска сервиса с указанием пути использовать команду:
+
+к базе данных *mysql*:
+> java "-Dspring.datasource.url=jdbc:mysql://localhost:3306/app" -jar artifacts/aqa-shop.jar
+
+к базе данных *postgresql*:
+> java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifacts/aqa-shop.jar
+3. Запустить тесты:
+
+для *mysql*:
+>./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"
+
+для *postgresql*
+>./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"
+5. Запустить отчет `./gradlew allureReport`.
 
 ### Ссылки на документы
 
